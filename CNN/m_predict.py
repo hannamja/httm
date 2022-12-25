@@ -16,6 +16,8 @@ from keras.models import model_from_json
 from keras_preprocessing.text import tokenizer_from_json
 from keras import regularizers
 import tensorflow as tf
+from tensorflow.keras.optimizers import Adam
+from CNN.data_processed import load_data_temp
 
 url_full_train_data = "C:\\Users\\ACER\\Downloads\\CNN\\dts-phuclong.xlsx"
 url_word2vec_full = "D:\\dts-phuclong_for_Word2vec.model"
@@ -75,8 +77,19 @@ def load_data(url_file_data, sheet_name, max_length):
     X_train = pad_sequences(sequences_train, maxlen=max_length, padding=pad[0])
     return tokenizer, X_train
 
-aspect_text = "mình suy sụp"
+aspect_text = ["mình suy sụp", 'chán', 'mk bùn', 'haha', 'hoho', 'siuuuuuuuu','winner feeling', 'wo happy','wo ai ni','i luv u',
+               'supa happy', 'vui quá là vui','vui lắm nghen','tương 4', 'có vui hong ta','giầu','mới chia tay','noel ko gấu']
 labels = ['pos', 'nev']
+pred = []
+true_y = ['nev','nev','nev','pos','pos','pos','pos','pos','pos','pos', 'pos','pos','pos','pos','pos','nev','nev','nev']
 token_label1, sam_label1 = load_data(url_full_train_data, "Sheet1", 300)
-label1_pred = predict(aspect_text, token_label1, sam_label1, load_aspect_model('D:\\model\\CNN_train_3c_relu.json', 'D:\\HDH\\dts-phuclong_raw_train_2c-001-0.0144-1.0000.h5'),labels)
-print(label1_pred)
+for i in aspect_text:
+    pred.append(predict(i, token_label1, sam_label1, load_aspect_model('D:\\model\\CNN_train_3c_relu.json', 'D:\\HDH\\dts-phuclong_raw_train_2c-001-0.0144-1.0000.h5'),labels))
+acc = 0
+for i in range(len(pred)):
+    if(pred[i][0]==true_y[i]):
+        acc+=1
+print('Số câu: ')
+print(len(pred))
+print('Đúng: ')
+print(acc)

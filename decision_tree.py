@@ -58,7 +58,7 @@ def prediction(X_test, clf_object):
 def cal_accuracy(y_test, y_pred):
     print("Confusion Matrix: ",
           confusion_matrix(y_test, y_pred))
-
+    print(y_test.shape)
     print("Accuracy : ",
           accuracy_score(y_test, y_pred) * 100)
 
